@@ -10,10 +10,11 @@ import (
 )
 
 type Tunnel struct {
-	addr    string
-	url     string
-	process *os.Process
-	token   string
+	addr     string
+	url      string
+	process  *os.Process
+	token    string
+	agentUrl string
 }
 
 type Options struct {
@@ -64,14 +65,19 @@ func (t *Tunnel) Start() error {
 	}
 
 	var log struct {
-		Msg string
-		Url string
+		Msg  string
+		Url  string
+		Addr string
 	}
 
 	for sc.Scan() {
 		err := json.Unmarshal(sc.Bytes(), &log)
 		if err != nil {
 			continue
+		}
+
+		if log.Msg == "starting web service" {
+			t.agentUrl = log.Msg
 		}
 
 		if log.Msg == "started tunnel" {
@@ -95,4 +101,8 @@ func (t *Tunnel) Close() error {
 
 func (t *Tunnel) Url() string {
 	return t.url
+}
+
+func (t *Tunnel) AgentUrl() string {
+	return t.agentUrl
 }
