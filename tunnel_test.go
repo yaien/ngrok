@@ -6,7 +6,7 @@ import (
 )
 
 func TestOpen(t *testing.T) {
-	tunnel, err := Open(context.TODO(), ":3000")
+	tunnel, err := Open(context.TODO(), Options{Addr: ":3000"})
 	if err != nil {
 		t.Fatalf("failed oppenning tunnel: %s", err)
 	}

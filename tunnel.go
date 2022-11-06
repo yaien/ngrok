@@ -13,10 +13,16 @@ type Tunnel struct {
 	addr    string
 	url     string
 	process *os.Process
+	token   string
 }
 
-func Open(ctx context.Context, addr string) (*Tunnel, error) {
-	t := &Tunnel{addr: addr}
+type Options struct {
+	Addr      string
+	AuthToken string
+}
+
+func Open(ctx context.Context, opts Options) (*Tunnel, error) {
+	t := &Tunnel{addr: opts.Addr, token: opts.AuthToken}
 	done := make(chan bool, 1)
 	var err error
 	go func() {
@@ -41,6 +47,9 @@ func (t *Tunnel) Start() error {
 	}
 
 	cmd := exec.Command(ngrok, "http", t.addr, "--log", "stdout", "--log-format", "json")
+	if t.token != "" {
+		cmd.Args = append(cmd.Args, "--authtoken", t.token)
+	}
 
 	out, err := cmd.StdoutPipe()
 	if err != nil {
