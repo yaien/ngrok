@@ -77,7 +77,7 @@ func (t *Tunnel) Start() error {
 		}
 
 		if log.Msg == "starting web service" {
-			t.agentUrl = log.Msg
+			t.agentUrl = log.Addr
 		}
 
 		if log.Msg == "started tunnel" {

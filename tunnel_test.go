@@ -11,5 +11,6 @@ func TestOpen(t *testing.T) {
 		t.Fatalf("failed oppenning tunnel: %s", err)
 	}
 	defer tunnel.Close()
-	t.Log("Tunnel listening on", tunnel.Url())
+	t.Log("ngrok tunnel listening on", tunnel.Url())
+	t.Log("ngrok agent listening on", tunnel.AgentUrl())
 }
