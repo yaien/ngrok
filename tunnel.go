@@ -68,6 +68,7 @@ func (t *Tunnel) Start() error {
 		Msg  string
 		Url  string
 		Addr string
+		Err  string
 	}
 
 	for sc.Scan() {
@@ -83,6 +84,10 @@ func (t *Tunnel) Start() error {
 		if log.Msg == "started tunnel" {
 			t.url = log.Url
 			break
+		}
+
+		if log.Msg == "command failed" {
+			return fmt.Errorf("failed ngrok command: %s", log.Err)
 		}
 	}
 
